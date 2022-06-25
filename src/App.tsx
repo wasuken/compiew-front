@@ -39,17 +39,9 @@ const useHooks = () => {
     };
   };
   const handleParseFromUrl = (url: string) => {
-    const uurl = url.split("?")[0];
-    const ext = uurl.split(".").slice(-1)[0];
-    const f = ext === "zip" ? parseZip : parseGZip;
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.responseType = "arraybuffer";
-    xhr.send();
-
-    xhr.addEventListener("load", function () {
-      f(xhr.response);
-    });
+    fetch(`${API_URL}/zipinfo?url=${url}`)
+      .then((res) => res.json())
+      .then((json) => setFilepathes(json.pathes));
   };
   return { handleFiles, filepathes, handleParseFromUrl };
 };
@@ -110,6 +102,8 @@ const genDefaultChild = (name: string) => {
     isOpen: false,
   };
 };
+
+const API_URL = `http://localhost:8082`
 
 function App() {
   const [uploadFile, setUploadFile] = useState("");

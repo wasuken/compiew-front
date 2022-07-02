@@ -43,7 +43,10 @@ const useHooks = () => {
       .then((res) => res.json())
       .then((json) => setFilepathes(json.pathes));
   };
-  return { handleFiles, filepathes, handleParseFromUrl };
+  const clearFilepathes = () => {
+    setFilepathes([]);
+  };
+  return { handleFiles, filepathes, handleParseFromUrl, clearFilepathes };
 };
 
 function genTable(fps: string[]) {
@@ -103,11 +106,12 @@ const genDefaultChild = (name: string) => {
   };
 };
 
-const API_URL = `http://localhost:8082`
+const API_URL = `http://localhost:8082`;
 
 function App() {
   const [uploadFile, setUploadFile] = useState("");
-  const { handleFiles, filepathes, handleParseFromUrl } = useHooks();
+  const { handleFiles, filepathes, handleParseFromUrl, clearFilepathes } =
+    useHooks();
   const [inputUrl, setInputUrl] = useState<string>("");
 
   return (
@@ -127,6 +131,12 @@ function App() {
             onChange={(e) => setInputUrl(e.target.value)}
           />
           <button onClick={() => handleParseFromUrl(inputUrl)}>read</button>
+        </div>
+      </div>
+      <div>
+        <h2 className="title">Util</h2>
+        <div>
+          <button onClick={() => clearFilepathes()}>clear</button>
         </div>
       </div>
       <div>

@@ -4,7 +4,7 @@ import { Zlib as Unzip } from "zlibjs/bin/unzip.min";
 import { isUint8Array } from "util/types";
 import { useState } from "react";
 
-const API_URL = `http://wasu-arch:8082`;
+export const API_URL = `http://wasu-arch:8082`;
 
 function parseGZip(a: ArrayBuffer, setFilepathes: (v: string[]) => void) {
   untar(pako.inflate(a).buffer).then((files: string[]) => setFilepathes(files));
@@ -84,9 +84,12 @@ export function genDataRoot(fps: string[]) {
       const cur_pathes = [...pathes, k];
       if (v instanceof Node) {
         c.children = f(v, cur_pathes);
+        c.isDir = true;
+      }else{
+        c.isDir = false;
       }
       if (k.length > 0) {
-        c.onClick = clickf(cur_pathes.join("/"));
+        c.fpath = cur_pathes.join("/");
         rst.push(c);
       }
     });
@@ -104,7 +107,8 @@ interface FolderNode {
   checked: number;
   isOpen: boolean;
   children: FolderNode[] | undefined;
-  onClick: FileClick;
+  fpath: string;
+  isDir: boolean;
 }
 
 const genDefaultChild = (name: string): FolderNode => {
@@ -112,7 +116,8 @@ const genDefaultChild = (name: string): FolderNode => {
     name: name,
     checked: 0.5,
     isOpen: false,
-    children: [],
-    onClick: () => {},
+    fpath: "",
+    children: undefined,
+    isDir: false,
   };
 };

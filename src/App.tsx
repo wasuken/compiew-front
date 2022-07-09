@@ -12,7 +12,7 @@ function App() {
   const [content, setContent] = useState<string>("");
   const [path, setPath] = useState<string>("");
   const [isViewContent, setIsViewContent] = useState<boolean>(false);
-  const handleTest = (state, e) => {
+  const handleFileClick = (state, e) => {
     const { fpath, isDir } = state.nodeData;
     if (isDir === false) {
       const ffpath = fpath.substring(1);
@@ -26,64 +26,82 @@ function App() {
         });
     }
   };
+  const handleClear = () => {
+    clearFilepathes();
+    setInputUrl("");
+    setContent("");
+    setPath("");
+    setIsViewContent(false);
+  };
 
   return (
     <div>
-      <div>
-        <h2 className="title">File Input</h2>
-        <p>内部のファイル一覧のみ確認可能</p>
-        <div>
-          <input type="file" onChange={handleFiles} />
-        </div>
-      </div>
-      <div>
-        <h2 className="title">URL Input</h2>
-        <div>
-          <input
-            type="url"
-            placeholder="zip or gz file url"
-            onChange={(e) => setInputUrl(e.target.value)}
-          />
-          <button onClick={() => handleParseFromUrl(inputUrl)}>read</button>
-        </div>
-      </div>
-      <div>
-        <h2 className="title">Util</h2>
-        <div>
-          <button onClick={() => clearFilepathes()}>clear</button>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "flex-start", height: "100%" }}>
-        <div style={{ width: "20vw", overflow: "scroll", height: "60vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          height: "100%",
+          width: "100%",
+        }}
+      >
+        <div style={{ width: "20vw", height: "100vh" }}>
+          <div>
+            <h2 className="title">File Input</h2>
+            <p>内部のファイル一覧のみ確認可能</p>
+            <div>
+              <input type="file" onChange={handleFiles} />
+            </div>
+          </div>
+          <div>
+            <h2 className="title">URL Input</h2>
+            <div>
+              <input
+                type="url"
+                placeholder="zip or gz file url"
+                value={inputUrl}
+                onChange={(e) => setInputUrl(e.target.value)}
+              />
+              <button onClick={() => handleParseFromUrl(inputUrl)}>read</button>
+            </div>
+          </div>
+          <div>
+            <h2 className="title">Util</h2>
+            <div>
+              <button onClick={handleClear}>clear</button>
+            </div>
+          </div>
           <h2 className="title">Directory Tree</h2>
           {filepathes.length <= 0 ? (
             <div></div>
           ) : (
-            <FolderTree
-              showCheckbox={false}
-              data={genDataRoot(filepathes)}
-              onNameClick={handleTest}
-            ></FolderTree>
+            <div style={{overflow: "scroll"}}>
+              <FolderTree
+                showCheckbox={false}
+                data={genDataRoot(filepathes)}
+                onNameClick={handleFileClick}
+              ></FolderTree>
+            </div>
           )}
         </div>
-        {isViewContent ? (
-          <div>
-            <h3>{path}</h3>
-            <pre
-              style={{
-                marginLeft: "10px",
-                overflow: "scroll",
-                height: "60vh",
-                width: "70vw",
-                wordWrap: "break-word",
-              }}
-            >
-              {content}
-            </pre>
-          </div>
-        ) : (
-          ""
-        )}
+        <div style={{ width: "75vw" }}>
+          {isViewContent ? (
+            <div>
+              <h3>{path}</h3>
+              <pre
+                style={{
+                  marginLeft: "10px",
+                  overflow: "scroll",
+                  height: "100vh",
+                  wordWrap: "break-word",
+                }}
+              >
+                {content}
+              </pre>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );

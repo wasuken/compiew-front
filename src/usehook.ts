@@ -4,7 +4,7 @@ import { Zlib as Unzip } from "zlibjs/bin/unzip.min";
 import { isUint8Array } from "util/types";
 import { useState } from "react";
 
-export const API_URL = `http://wasu-arch:8082`;
+export const API_URL = process.env.REACT_APP_API_URL;
 
 function parseGZip(a: ArrayBuffer, setFilepathes: (v: string[]) => void) {
   untar(pako.inflate(a).buffer).then((files: string[]) => setFilepathes(files));

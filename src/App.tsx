@@ -1,13 +1,14 @@
 import React, { useRef, useState, ChangeEventHandler } from "react";
-import FolderTree from "react-folder-tree";
 import logo from "./logo.svg";
 import "./App.css";
 import { API_URL, useHooks, genDataRoot } from "./usehook";
+import FolderTree from "./components/FolderTree"
 
 function App() {
   const [uploadFile, setUploadFile] = useState<string>("");
   const { handleFiles, filepathes, handleParseFromUrl, clearFilepathes } =
     useHooks();
+  console.log("debug", genDataRoot(filepathes))
   const [inputUrl, setInputUrl] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [path, setPath] = useState<string>("");
@@ -75,11 +76,8 @@ function App() {
             <div></div>
           ) : (
             <div style={{overflow: "scroll"}}>
-              <FolderTree
-                showCheckbox={false}
-                data={genDataRoot(filepathes)}
-                onNameClick={handleFileClick}
-              ></FolderTree>
+                <FolderTree data={[genDataRoot(filepathes)]} />
+
             </div>
           )}
         </div>

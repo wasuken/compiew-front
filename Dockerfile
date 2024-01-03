@@ -1,7 +1,8 @@
-FROM node:17-alpine
+FROM node:20-alpine
 WORKDIR /usr/app
 
-# node_modules周り
-# ソースコピー -> npm i周り
+COPY . .
+RUN npm i
 
-ENTRYPOINT ["/bin/sh", "-c", "while :; do sleep 10; done"]
+# ENTRYPOINT ["/bin/sh", "-c", "while :; do sleep 10; done"]
+CMD ["npm", "start"]

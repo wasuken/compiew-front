@@ -37,7 +37,10 @@ export const useHooks = () => {
   const handleParseFromUrl = (url: string) => {
     fetch(`${API_URL}/zipinfo?url=${url}`)
       .then((res) => res.json())
-      .then((json) => setFilepathes(json.pathes));
+      .then((json) => {
+        console.log("debug", genDataRoot(json.pathes))
+        setFilepathes(json.pathes)
+      });
   };
   const clearFilepathes = () => {
     setFilepathes([]);

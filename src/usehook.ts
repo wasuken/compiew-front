@@ -16,9 +16,7 @@ function parseZip(a: ArrayBuffer, setFilepathes: (v: string[]) => void) {
 
 export const useHooks = () => {
   const [filepathes, setFilepathes] = useState<string[]>([]);
-  const handleFiles = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     let reader: FileReader = new FileReader();
     const files = e.currentTarget.files;
     if (!files || files?.length <= 0) return;
@@ -38,8 +36,8 @@ export const useHooks = () => {
     fetch(`${API_URL}/zipinfo?url=${url}`)
       .then((res) => res.json())
       .then((json) => {
-        console.log("debug", genDataRoot(json.pathes))
-        setFilepathes(json.pathes)
+        console.log("debug", genDataRoot(json.pathes));
+        setFilepathes(json.pathes);
       });
   };
   const clearFilepathes = () => {
@@ -88,7 +86,7 @@ export function genDataRoot(fps: string[]) {
       if (v instanceof Node) {
         c.children = f(v, cur_pathes);
         c.isDir = true;
-      }else{
+      } else {
         c.isDir = false;
       }
       if (k.length > 0) {
@@ -98,7 +96,11 @@ export function genDataRoot(fps: string[]) {
     });
     return rst;
   };
-  let top = genDefaultChild("<root>");
+  let top = {
+    ...genDefaultChild("<root>"),
+    isOpen: true,
+    isDir: true,
+  };
   top.children = f(tbl, [""]);
   return top;
 }

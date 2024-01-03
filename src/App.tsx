@@ -8,13 +8,12 @@ function App() {
   const [uploadFile, setUploadFile] = useState<string>("");
   const { handleFiles, filepathes, handleParseFromUrl, clearFilepathes } =
     useHooks();
-  console.log("debug", genDataRoot(filepathes));
   const [inputUrl, setInputUrl] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [path, setPath] = useState<string>("");
   const [isViewContent, setIsViewContent] = useState<boolean>(false);
-  const handleFileClick = (state, e) => {
-    const { fpath, isDir } = state.nodeData;
+  const handleFileClick = function (tr: FolderNode) {
+    const { fpath, isDir } = tr;
     if (isDir === false) {
       const ffpath = fpath.substring(1);
       // TODO: 眠いので明日、ファイル単一参照APIへReqする
@@ -76,7 +75,10 @@ function App() {
             <div></div>
           ) : (
             <div style={{ overflow: "scroll" }}>
-              <FolderTree data={genDataRoot(filepathes)} />
+              <FolderTree
+                data={genDataRoot(filepathes)}
+                handleFileClick={handleFileClick}
+              />
             </div>
           )}
         </div>
